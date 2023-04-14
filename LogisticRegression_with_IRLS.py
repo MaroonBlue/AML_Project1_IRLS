@@ -15,7 +15,7 @@ class LogisticRegression_with_IRLS:
         self.beta = None
         
         
-    def fit(self, X, y, interaction_ids = []):
+    def fit(self, X, y, interaction_ids = [], max_iter=100):
         """ Fits the model using training data"""
         
         # test if X matrix and y vector of the same length
@@ -33,8 +33,7 @@ class LogisticRegression_with_IRLS:
         self.p = np.shape(X)[1]
         
         self.interaction_ids = interaction_ids
-        
-        self.beta, self.X = self.IRLS_with_interactions(X, y, self.interaction_ids)
+        self.beta, self.X = self.IRLS_with_interactions(X, y, self.interaction_ids, max_iter=max_iter)
 
     def add_interactions(self, X, interaction_ids):
         for interaction in interaction_ids:
@@ -42,7 +41,7 @@ class LogisticRegression_with_IRLS:
             X = np.insert(X, X.shape[1], new_col, axis=1)
         return X
 
-    def IRLS_with_interactions(self, X, y, interaction_ids, maxiter=100, w_init = 1, d = 0.0001, tolerance = 0.001):
+    def IRLS_with_interactions(self, X, y, interaction_ids, max_iter=100, w_init = 1, d = 0.0001, tolerance = 0.001):
         
         X = self.add_interactions(X, interaction_ids)
         n,p = X.shape
@@ -51,7 +50,7 @@ class LogisticRegression_with_IRLS:
         W = np.diag( w )
         B_new = np.dot(inv( X.T.dot(W).dot(X) ), 
                 ( X.T.dot(W).dot(y)))
-        for _ in range(maxiter):
+        for _ in range(max_iter):
             B_old = B_new
             _w = abs(y - X.dot(B_old)).T
             w = float(1)/np.maximum( delta, _w )
@@ -72,7 +71,7 @@ class LogisticRegression_with_IRLS:
         return pi
     
     def predict(self, Xtest):
-        """ Assigns the predicted class (0 or 1) for observations whose feature values are in rows of the matrix Xtest"""
+        """ Assigns the predicted class (0 or 1) for observations whose feature values are in rows of the matrix Xtest"""
         pi = self.predict_proba(Xtest)
         y_pred = np.multiply([pi>0.5], 1)[0];
         
