@@ -2,7 +2,7 @@ import numpy as np
 np.random.seed(123)
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import train_test_split
-from LogisticRegression_with_IRLS_acc import LogisticRegression_with_IRLS
+from Implementation import LogisticRegression_with_IRLS
 import matplotlib.pyplot as plt
 from scipy.stats import bernoulli
 
