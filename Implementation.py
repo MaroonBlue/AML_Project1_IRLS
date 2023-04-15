@@ -73,9 +73,8 @@ class LogisticRegression_with_IRLS:
             X = np.insert(X, X.shape[1], new_col, axis=1)
         return X
 
-    def IRLS_with_interactions(self, X, y, interaction_ids, max_iter=100, w_init = 0.5, d = 0.0001, tolerance = 0.001):
-        """ Performs IRLS alghorithm 
-            Returns optimal beta parameter and X with additional columns created due to interactions between original column
+    def IRLS_with_interactions(self, X, y, interaction_ids, max_iter=100, w_init = 0.25, d = 0.0001, tolerance = 0.001):
+        """ Fits the model using training data.
         
         Args:
             X (numpy.ndarray): The training dataset.
@@ -119,7 +118,7 @@ class LogisticRegression_with_IRLS:
         return B_new, X
     
     def predict_proba(self, Xtest):
-        """ Predicts posterior probabilities for class 1 for observations whose feature values are in rows of the matrix Xtest using beta calculated during fitting the model.
+        """ Predicts posterior probabilities for class 1 for observations whose feature values are in rows of the matrix Xtest.
         
         Args:
             Xtest (numpy.ndarray): The test dataset."""
@@ -130,7 +129,7 @@ class LogisticRegression_with_IRLS:
         return pi
     
     def predict(self, Xtest):
-        """ Assigns the predicted class (0 or 1) for observations whose feature values are in rows of the matrix Xtest using beta calculated during fitting the model.
+        """ Assigns the predicted class (0 or 1) for observations whose feature values are in rows of the matrix Xtest.
         
         Args:
             Xtest (numpy.ndarray): The test dataset."""
@@ -146,7 +145,7 @@ class LogisticRegression_with_IRLS:
         return self.beta
     
     def predict_proba_test(self, Xtest, beta):
-        """ Predicts posterior probabilities for class 1 for observations whose feature values are in rows of the matrix Xtest using given beta.
+        """ Predicts posterior probabilities for class 1 for observations whose feature values are in rows of the matrix Xtest.
         
         Args:
             Xtest (numpy.ndarray): The test dataset.
@@ -158,7 +157,7 @@ class LogisticRegression_with_IRLS:
         return pi
     
     def predict_test(self, Xtest, beta):
-        """ Assigns the predicted class (0 or 1) for observations whose feature values are in rows of the matrix Xtest using given beta.
+        """ Assigns the predicted class (0 or 1) for observations whose feature values are in rows of the matrix Xtest.
         
         Args:
             Xtest (numpy.ndarray): The test dataset.

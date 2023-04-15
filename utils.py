@@ -183,12 +183,15 @@ def check_performance(X, y, dataset_name, if_interactions=False, interaction_ids
     print(f'Accuracy: {acc}')
 
     #draw results
-
     fig, ax = plt.subplots(1, 2, figsize=(15, 6))
-    ax[0].scatter(X_test[:,0], X_test[:,1], c=y_test, cmap='winter')
+    ax[0].scatter(X_test[y_test == 0][:,0], X_test[y_test == 0][:,1], c='blue', label='Class 0')
+    ax[0].scatter(X_test[y_test == 1][:,0], X_test[y_test == 1][:,1], c='limegreen', label='Class 1')
     ax[0].set_title('Original dataset', fontsize=20)
-    ax[1].scatter(X_test[:,0], X_test[:,1], c=y_pred, cmap='winter')
+    ax[0].legend()
+    ax[1].scatter(X_test[y_pred == 0][:,0], X_test[y_pred == 0][:,1], c='blue', label='Class 0')
+    ax[1].scatter(X_test[y_pred == 1][:,0], X_test[y_pred == 1][:,1], c='limegreen', label='Class 1')
     ax[1].set_title('Predicted classes', fontsize=20)
+    ax[1].legend()
     fig.suptitle(dataset_name, fontsize=20)
     plt.show()
 
@@ -368,4 +371,4 @@ def make_boxplot_part3(data, name, dataset_name):
     fig_auc.set_title(f'{name} for different models for {dataset_name}', fontsize=20)
     fig_auc.set_ylabel(f'{name}', fontsize=15)
     fig_auc.set_xlabel('Model', fontsize=15)
-    fig_auc.set_xticklabels(['LDA', 'QDA', 'KNN', 'IRLS', 'IRLS_interactions', 'Linear Regression'], fontsize=12)
+    fig_auc.set_xticklabels(['LDA', 'QDA', 'KNN', 'Logistic \n Regression \n IRLS', 'Logistic \n Regression \n IRLS interactions', 'Logistic Regression'], fontsize=12)
