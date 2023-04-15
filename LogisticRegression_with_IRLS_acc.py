@@ -9,8 +9,8 @@ class LogisticRegression_with_IRLS:
         """Initializes the model
 
         Args:
-            X_test (numpy.ndarray): The test dataset, needed if test_flag is True.
-            y_test (numpy.ndarray): The test labels, needed if test_flag is True.
+            X_test (numpy.ndarray): The test dataset, is needed if test_flag is True.
+            y_test (numpy.ndarray): The test labels, is needed if test_flag is True.
             test_flag (bool): If True, the model will be tested on the test dataset."""
                 
         # nr of instances
@@ -118,7 +118,7 @@ class LogisticRegression_with_IRLS:
         return B_new, X
     
     def predict_proba(self, Xtest):
-        """ Predicts posterior probabilities for class 1 for observations whose featurevalues are in rows of the matrix Xtest.
+        """ Predicts posterior probabilities for class 1 for observations whose feature values are in rows of the matrix Xtest.
         
         Args:
             Xtest (numpy.ndarray): The test dataset."""

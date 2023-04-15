@@ -6,9 +6,18 @@ from LogisticRegression_with_IRLS_acc import LogisticRegression_with_IRLS
 import matplotlib.pyplot as plt
 from scipy.stats import bernoulli
 
+from sklearn.linear_model import LogisticRegression
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
+from sklearn.neighbors import KNeighborsClassifier
+
+import seaborn as sns
+sns.set(rc={'figure.figsize':(11,9)})
+
+# Part 2 of the project
+
 def sigmoid(z):
     """Sigmoid function for logistic regression."""
-    
+
     return 1.0 / (1.0 + np.exp(-z))
 
 def generate_dataset1(size, num_features=2):
@@ -25,7 +34,7 @@ def generate_dataset1(size, num_features=2):
 
 
 def generate_dataset2(size):
-    """Generates a dataset with a given size and number of features.
+    """Generates a dataset with a given size and the number of features.
 
     Args:
         size (int): Number of observations."""
@@ -42,7 +51,7 @@ def generate_dataset2(size):
 
 
 def generate_dataset3(m):
-    """Generates a dataset with a given size and number of features.
+    """Generates a dataset with a given size and the number of features.
     
     Args:
         m (int): Mean of the second class."""
@@ -58,7 +67,7 @@ def generate_dataset3(m):
     return dataset
 
 def generate_dataset4(variance):
-    """Generates a dataset with a given size and number of features.
+    """Generates a dataset with a given size and the number of features.
     
     Args:
         variance (float): Variance of the noise."""
@@ -205,3 +214,158 @@ def draw_boundary(X, y, coef, iter_num):
     ax.plot(x1, y)
     ax.set_title(f'Boundary after {iter_num} iterations', fontsize=20)
     plt.show()
+
+
+# Part 3 of the project
+
+def metrics_lr(X_train, X_test, y_train, y_test):
+    """Calculates the metrics for the logistic regression model.
+    
+    Args:
+        X_train: The training dataset.
+        X_test: The testing dataset.
+        y_train: The training labels.
+        y_test: The testing labels."""
+
+    lr=LogisticRegression()
+    lr.fit(X_train, y_train)
+    y_pred = lr.predict(X_test)
+    acc=accuracy_score(y_test, y_pred)
+    prec=precision_score(y_test, y_pred)
+    rec=recall_score(y_test, y_pred)
+    f1=f1_score(y_test, y_pred)
+    return acc, prec, rec, f1
+
+def metrics_LDA(X_train, X_test, y_train, y_test):
+    """Calculates the metrics for the linear discriminant analysis model.
+    
+    Args:
+        X_train: The training dataset.
+        X_test: The testing dataset.
+        y_train: The training labels.
+        y_test: The testing labels."""
+
+    lda = LinearDiscriminantAnalysis()
+    lda.fit(X_train, y_train)
+    y_pred = lda.predict(X_test)
+    acc=accuracy_score(y_test, y_pred)
+    prec=precision_score(y_test, y_pred)
+    rec=recall_score(y_test, y_pred)
+    f1=f1_score(y_test, y_pred)
+    return acc, prec, rec, f1
+
+def metrics_QDA(X_train, X_test, y_train, y_test):
+    """Calculates the metrics for the quadratic discriminant analysis model.
+
+    Args:
+        X_train: The training dataset.
+        X_test: The testing dataset.
+        y_train: The training labels.
+        y_test: The testing labels."""
+
+    qda = QuadraticDiscriminantAnalysis()
+    qda.fit(X_train, y_train)
+    y_pred = qda.predict(X_test)
+    acc=accuracy_score(y_test, y_pred)
+    prec=precision_score(y_test, y_pred)
+    rec=recall_score(y_test, y_pred)
+    f1=f1_score(y_test, y_pred)
+    return acc, prec, rec, f1
+
+def metrics_KNN(X_train, X_test, y_train, y_test):
+    """Calculates the metrics for the K-nearest neighbors model.
+
+    Args:
+        X_train: The training dataset.
+        X_test: The testing dataset.
+        y_train: The training labels.
+        y_test: The testing labels."""
+
+    knn = KNeighborsClassifier()
+    knn.fit(X_train, y_train)
+    y_pred = knn.predict(X_test)
+    acc=accuracy_score(y_test, y_pred)
+    prec=precision_score(y_test, y_pred)
+    rec=recall_score(y_test, y_pred)
+    f1=f1_score(y_test, y_pred)
+    return acc, prec, rec, f1
+
+def metrics_IRLS(X_train, X_test, y_train, y_test):
+    """Calculates the metrics for the IRLS model.
+
+    Args:
+        X_train: The training dataset.
+        X_test: The testing dataset.
+        y_train: The training labels.
+        y_test: The testing labels."""
+
+    clf = LogisticRegression_with_IRLS()
+    X_train_np=np.array(X_train)
+    X_test_np=np.array(X_test)
+    y_train_np=np.array(y_train)
+    y_test_np=np.array(y_test)
+    clf.fit(X_train_np,y_train_np, max_iter=1000)
+    y_pred = clf.predict(X_test_np)
+    acc=accuracy_score(y_test_np, y_pred)
+    prec=precision_score(y_test_np, y_pred)
+    rec=recall_score(y_test_np, y_pred)
+    f1=f1_score(y_test_np, y_pred)
+    return acc, prec, rec, f1
+
+def metrics_IRLS_interactions(X_train, X_test, y_train, y_test):
+    """Calculates the metrics for the IRLS model with interactions.
+
+    Args:
+        X_train: The training dataset.
+        X_test: The testing dataset.
+        y_train: The training labels.
+        y_test: The testing labels."""
+
+    clf = LogisticRegression_with_IRLS()
+    X_train_np=np.array(X_train)
+    X_test_np=np.array(X_test)
+    y_train_np=np.array(y_train)
+    y_test_np=np.array(y_test)
+    clf.fit(X_train_np,y_train_np, [[0,1], [1,2]], max_iter=1000)
+    y_pred = clf.predict(X_test_np)
+    acc=accuracy_score(y_test_np, y_pred)
+    prec=precision_score(y_test_np, y_pred)
+    rec=recall_score(y_test_np, y_pred)
+    f1=f1_score(y_test_np, y_pred)
+    return acc, prec, rec, f1
+
+def run_experiments_part3(X, y, iterations=10):
+    """Runs the experiments for part 3.
+
+    Args:
+        X: The dataset.
+        y: The labels.
+        iterations: The number of iterations to run the experiments."""
+
+    acc_all=np.zeros((iterations, 6))
+    prec_all=np.zeros((iterations, 6))
+    rec_all=np.zeros((iterations, 6))
+    f1_all=np.zeros((iterations, 6))
+    for i in range(iterations):
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=i)
+        acc_all[i, 0], prec_all[i, 0], rec_all[i, 0], f1_all[i, 0] = metrics_LDA(X_train, X_test, y_train, y_test)
+        acc_all[i, 1], prec_all[i, 1], rec_all[i, 1], f1_all[i, 1] = metrics_QDA(X_train, X_test, y_train, y_test)
+        acc_all[i, 2], prec_all[i, 2], rec_all[i, 2], f1_all[i, 2] = metrics_KNN(X_train, X_test, y_train, y_test)
+        acc_all[i, 3], prec_all[i, 3], rec_all[i, 3], f1_all[i, 3] = metrics_IRLS(X_train, X_test, y_train, y_test)
+        acc_all[i, 4], prec_all[i, 4], rec_all[i, 4], f1_all[i, 4] = metrics_IRLS_interactions(X_train, X_test, y_train, y_test)
+        acc_all[i, 5], prec_all[i, 5], rec_all[i, 5], f1_all[i, 5] = metrics_lr(X_train, X_test, y_train, y_test)
+    return acc_all, prec_all, rec_all, f1_all
+
+def make_boxplot_part3(data, name, dataset_name):
+    """Makes a boxplot for the metrics.
+
+    Args:
+        data: The data to plot.
+        name: The name of the metric.
+        dataset_name: The name of the dataset."""
+
+    fig_auc=sns.boxplot(data=data, palette='Blues_d')
+    fig_auc.set_title(f'{name} for different models for {dataset_name}', fontsize=20)
+    fig_auc.set_ylabel(f'{name}', fontsize=15)
+    fig_auc.set_xlabel('Model', fontsize=15)
+    fig_auc.set_xticklabels(['LDA', 'QDA', 'KNN', 'IRLS', 'IRLS_interactions', 'Linear Regression'], fontsize=12)
