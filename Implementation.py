@@ -74,7 +74,7 @@ class LogisticRegression_with_IRLS:
         return X
 
     def IRLS_with_interactions(self, X, y, interaction_ids, max_iter=100, w_init = 0.25, d = 0.0001, tolerance = 0.001):
-        """ Fits the model using training data.
+        """ Performs the Iterative Reweighted Least Squares optimization alghorithm
         
         Args:
             X (numpy.ndarray): The training dataset.
@@ -90,20 +90,20 @@ class LogisticRegression_with_IRLS:
             tol_all = []
 
         X = self.add_interactions(X, interaction_ids)
-        n,p = X.shape
-        delta = np.array(np.repeat(d, n)).reshape(1,n)
-        w = np.repeat(w_init, n)
-        W = np.diag( w )
+        n = X.shape[0]
+        d = np.array(np.repeat(d, n)).reshape(1,n)
+        p = np.repeat(w_init, n)
+        W = np.diag( p )
         B_new = np.dot(inv( X.T.dot(W).dot(X) ), 
                 ( X.T.dot(W).dot(y)))
         for i in range(max_iter):
             B_old = B_new
-            _w = abs(y - X.dot(B_old)).T
-            w = float(1)/np.maximum( delta, _w )
-            W = np.diag( w[0] )
+            p = float(1)/np.maximum( d, abs(y - X.dot(B_old)).T )
+            W = np.diag( p[0] )
             B_new = np.dot(inv( X.T.dot(W).dot(X)), 
                     ( X.T.dot(W).dot(y) ) )
             tol = sum( abs( B_new - B_old ) ) 
+
             if self.test_flag:
                 acc_all.append(accuracy_score(self.y_test, self.predict_test(self.X_test, B_new)))
                 tol_all.append(tol)
